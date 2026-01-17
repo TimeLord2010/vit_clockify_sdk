@@ -9,7 +9,7 @@ class Membership {
   final String userId;
 
   /// The hourly rate for this user in this project.
-  final HourlyRate hourlyRate;
+  HourlyRate hourlyRate;
 
   /// Creates a new [Membership] instance.
   Membership({required this.userId, required this.hourlyRate});
@@ -29,9 +29,9 @@ class Membership {
 
   /// Converts this [Membership] to JSON format.
   Map<String, dynamic> toJson() => {
-        'userId': userId,
-        'hourlyRate': hourlyRate.toJson(),
-      };
+    'userId': userId,
+    'hourlyRate': hourlyRate.toJson(),
+  };
 
   @override
   bool operator ==(Object other) =>

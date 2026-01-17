@@ -6,8 +6,8 @@ import 'time_interval.dart';
 /// A time entry represents a tracked block of time associated with a user,
 /// optionally on a specific project, with an optional description.
 class TimeEntry {
-  /// Optional description of what was done during this time entry.
-  final String? description;
+  /// Description of what was done during this time entry.
+  final String description;
 
   /// The hourly rate applied to this time entry.
   final HourlyRate hourlyRate;
@@ -15,7 +15,7 @@ class TimeEntry {
   /// The unique identifier of the project associated with this entry.
   ///
   /// May be null if the time entry is not associated with any project.
-  final String? projectId;
+  final String projectId;
 
   /// The unique identifier of the user who created this time entry.
   final String userId;
@@ -25,9 +25,9 @@ class TimeEntry {
 
   /// Creates a new [TimeEntry] instance.
   TimeEntry({
-    this.description,
+    required this.description,
     required this.hourlyRate,
-    this.projectId,
+    required this.projectId,
     required this.userId,
     required this.timeInterval,
   });
@@ -38,11 +38,11 @@ class TimeEntry {
   /// 'description', 'hourlyRate', and 'projectId' keys.
   factory TimeEntry.fromJson(Map<String, dynamic> json) {
     return TimeEntry(
-      description: json['description'] as String?,
+      description: json['description'] ?? '',
       hourlyRate: HourlyRate.fromJson(
         (json['hourlyRate'] as Map<String, dynamic>?) ?? {'amount': 0},
       ),
-      projectId: json['projectId'] as String?,
+      projectId: json['projectId'],
       userId: json['userId'] as String,
       timeInterval: TimeInterval.fromJson(
         json['timeInterval'] as Map<String, dynamic>,
@@ -52,12 +52,12 @@ class TimeEntry {
 
   /// Converts this [TimeEntry] to JSON format.
   Map<String, dynamic> toJson() => {
-        'description': description,
-        'hourlyRate': hourlyRate.toJson(),
-        'projectId': projectId,
-        'userId': userId,
-        'timeInterval': timeInterval.toJson(),
-      };
+    'description': description,
+    'hourlyRate': hourlyRate.toJson(),
+    'projectId': projectId,
+    'userId': userId,
+    'timeInterval': timeInterval.toJson(),
+  };
 
   @override
   bool operator ==(Object other) =>
