@@ -25,14 +25,14 @@ Future<void> main() async {
     );
     print('Found ${projects.length} project(s)');
     for (final project in projects.take(3)) {
-      print('  - ${project.name} (${project.archived ? 'archived' : 'active'})');
+      print(
+        '  - ${project.name} (${project.archived ? 'archived' : 'active'})',
+      );
     }
 
     // Fetch users in the workspace
     print('\nFetching users...');
-    final users = await VitClockify.users.getAll(
-      workspaceId: workspace.id,
-    );
+    final users = await VitClockify.users.getAll(workspaceId: workspace.id);
     print('Found ${users.length} user(s)');
 
     if (users.isEmpty) {
@@ -69,8 +69,10 @@ Future<void> main() async {
       print('\nRecent entries:');
       for (final entry in timeEntries.take(3)) {
         final duration = entry.timeInterval.duration;
-        final description = entry.description ?? 'No description';
-        print('  - $description (${duration.inHours}h ${duration.inMinutes % 60}m)');
+        final description = entry.description;
+        print(
+          '  - $description (${duration.inHours}h ${duration.inMinutes % 60}m)',
+        );
       }
     }
   } on ClockifyAuthException catch (e) {
