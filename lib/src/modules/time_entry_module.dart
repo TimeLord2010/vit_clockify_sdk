@@ -5,9 +5,52 @@ import '../core/constants.dart';
 import '../core/error_handler.dart';
 import '../core/http_client.dart';
 import '../models/time_entry.dart';
+import '../models/time_entry_request.dart';
 
 /// Module for managing Clockify time entry operations.
 class TimeEntryModule {
+  /// Creates a new time entry in Clockify.
+  ///
+  /// Creates a time entry for the specified user in the given workspace.
+  /// Note: Creating time entries for other users is a paid feature.
+  ///
+  /// Parameters:
+  ///   - [request]: The [TimeEntryRequest] object containing the entry details,
+  ///     including the workspace ID
+  ///
+  /// Returns a [Future] that resolves to the created [TimeEntry] object.
+  ///
+  /// Throws:
+  ///   - [ClockifyAuthException] if the API key is invalid
+  ///   - [ClockifyNotFoundException] if the workspace doesn't exist
+  ///   - [ClockifyNetworkException] if there's a network issue
+  ///   - [ClockifyException] for other API errors
+  ///
+  /// Example:
+  /// ```dart
+  /// final request = TimeEntryRequest(
+  ///   workspaceId: 'workspace456',
+  ///   start: DateTime.now().toUtc().toIso8601String(),
+  ///   end: DateTime.now().add(Duration(hours: 1)).toUtc().toIso8601String(),
+  ///   description: 'Implemented new feature',
+  ///   projectId: 'project123',
+  /// );
+  ///
+  /// final entry = await VitClockify.timeEntries.create(request);
+  /// ```
+  Future<TimeEntry> create(TimeEntryRequest request) async {
+    try {
+      final response = await ClockifyHttpClient.instance.post(
+        '/workspaces/${request.workspaceId}/time-entries',
+        data: request.toJson(),
+      );
+
+      return TimeEntry.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioException(e);
+    }
+  }
+
   /// Fetches time entries for a specific user within a workspace.
   ///
   /// Returns a list of [TimeEntry] objects for the given user, optionally
@@ -45,9 +88,7 @@ class TimeEntryModule {
     DateTime? endDate,
   }) async {
     try {
-      final queryParams = <String, dynamic>{
-        'page-size': defaultPageSize,
-      };
+      final queryParams = <String, dynamic>{'page-size': defaultPageSize};
 
       if (startDate != null) {
         queryParams['start'] = startDate.toUtc().toIso8601String();
