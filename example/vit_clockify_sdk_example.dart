@@ -59,7 +59,7 @@ Future<void> main() async {
       // Calculate total duration
       final totalDuration = timeEntries.fold<Duration>(
         Duration.zero,
-        (sum, entry) => sum + entry.timeInterval.duration,
+        (sum, entry) => sum + (entry.timeInterval.duration ?? Duration.zero),
       );
       final hours = totalDuration.inHours;
       final minutes = totalDuration.inMinutes % 60;
@@ -68,7 +68,7 @@ Future<void> main() async {
       // Show first few entries
       print('\nRecent entries:');
       for (final entry in timeEntries.take(3)) {
-        final duration = entry.timeInterval.duration;
+        final duration = entry.timeInterval.duration ?? Duration.zero;
         final description = entry.description;
         print(
           '  - $description (${duration.inHours}h ${duration.inMinutes % 60}m)',

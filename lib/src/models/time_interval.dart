@@ -9,13 +9,13 @@ class TimeInterval {
   /// The end time of the interval (in local time).
   ///
   /// For ongoing entries, this may be set to the current time.
-  final DateTime end;
+  final DateTime? end;
 
   /// Creates a new [TimeInterval] instance.
   TimeInterval({required this.start, required this.end});
 
   /// The duration of this time interval.
-  Duration get duration => end.difference(start);
+  Duration? get duration => end?.difference(start);
 
   /// Creates a [TimeInterval] instance from JSON data.
   ///
@@ -33,10 +33,10 @@ class TimeInterval {
       throw FormatException('TimeInterval requires a "start" field');
     }
 
-    final start = DateTime.parse(startStr).toLocal();
-    final end = endStr != null && endStr.isNotEmpty
+    DateTime start = DateTime.parse(startStr).toLocal();
+    DateTime? end = endStr != null && endStr.isNotEmpty
         ? DateTime.parse(endStr).toLocal()
-        : DateTime.now();
+        : null;
 
     return TimeInterval(start: start, end: end);
   }
@@ -45,9 +45,9 @@ class TimeInterval {
   ///
   /// Returns ISO 8601 formatted date-time strings in UTC.
   Map<String, dynamic> toJson() => {
-        'start': start.toUtc().toIso8601String(),
-        'end': end.toUtc().toIso8601String(),
-      };
+    'start': start.toUtc().toIso8601String(),
+    'end': end?.toUtc().toIso8601String(),
+  };
 
   @override
   bool operator ==(Object other) =>
