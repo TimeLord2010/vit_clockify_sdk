@@ -6,6 +6,9 @@ import 'time_interval.dart';
 /// A time entry represents a tracked block of time associated with a user,
 /// optionally on a specific project, with an optional description.
 class TimeEntry {
+  /// The unique identifier of this time entry.
+  final String id;
+
   /// Description of what was done during this time entry.
   final String description;
 
@@ -25,6 +28,7 @@ class TimeEntry {
 
   /// Creates a new [TimeEntry] instance.
   TimeEntry({
+    required this.id,
     required this.description,
     required this.hourlyRate,
     required this.projectId,
@@ -34,10 +38,11 @@ class TimeEntry {
 
   /// Creates a [TimeEntry] instance from JSON data.
   ///
-  /// Expects a map with 'userId', 'timeInterval', and optionally
+  /// Expects a map with 'id', 'userId', 'timeInterval', and optionally
   /// 'description', 'hourlyRate', and 'projectId' keys.
   factory TimeEntry.fromJson(Map<String, dynamic> json) {
     return TimeEntry(
+      id: json['id'] as String,
       description: json['description'] ?? '',
       hourlyRate: HourlyRate.fromJson(
         (json['hourlyRate'] as Map<String, dynamic>?) ?? {'amount': 0},
@@ -52,6 +57,7 @@ class TimeEntry {
 
   /// Converts this [TimeEntry] to JSON format.
   Map<String, dynamic> toJson() => {
+    'id': id,
     'description': description,
     'hourlyRate': hourlyRate.toJson(),
     'projectId': projectId,
@@ -72,5 +78,5 @@ class TimeEntry {
 
   @override
   String toString() =>
-      'TimeEntry(userId: $userId, projectId: $projectId, description: $description, duration: ${timeInterval.duration})';
+      'TimeEntry(id: $id, userId: $userId, projectId: $projectId, description: $description, duration: ${timeInterval.duration})';
 }

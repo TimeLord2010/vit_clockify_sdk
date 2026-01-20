@@ -111,4 +111,90 @@ class TimeEntryModule {
       throw ErrorHandler.handleDioException(e);
     }
   }
+
+  /// Stops a running timer by setting its end time.
+  ///
+  /// Updates the currently running time entry to add an end time, effectively stopping the timer.
+  ///
+  /// Parameters:
+  ///   - [workspaceId]: The unique identifier of the workspace
+  ///   - [userId]: The unique identifier of the user whose timer to stop
+  ///   - [end]: Optional end time. If not provided, defaults to current time.
+  ///
+  /// Returns a [Future] that resolves to the updated [TimeEntry] object.
+  ///
+  /// Throws:
+  ///   - [ClockifyAuthException] if the API key is invalid
+  ///   - [ClockifyNotFoundException] if the workspace or user doesn't exist, or no timer is running
+  ///   - [ClockifyNetworkException] if there's a network issue
+  ///   - [ClockifyException] for other API errors
+  ///
+  /// Example:
+  /// ```dart
+  /// final stoppedEntry = await VitClockify.timeEntries.stopTimer(
+  ///   workspaceId: 'workspace456',
+  ///   userId: 'user123',
+  /// );
+  /// ```
+  Future<TimeEntry> stopTimer({
+    required String workspaceId,
+    required String userId,
+    DateTime? end,
+  }) async {
+    try {
+      final endTime = end ?? DateTime.now();
+      final response = await ClockifyHttpClient.instance.patch(
+        '/workspaces/$workspaceId/user/$userId/time-entries',
+        data: {'end': endTime.toUtc().toIso8601String()},
+      );
+      return TimeEntry.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioException(e);
+    }
+  }
+
+  /// Gets the currently running timer for a user, if any.
+  ///
+  /// Fetches time entries that are currently in progress (no end time set).
+  ///
+  /// Parameters:
+  ///   - [workspaceId]: The unique identifier of the workspace
+  ///   - [userId]: The unique identifier of the user
+  ///
+  /// Returns a [Future] that resolves to the running [TimeEntry] or null
+  /// if no timer is currently running.
+  ///
+  /// Throws:
+  ///   - [ClockifyAuthException] if the API key is invalid
+  ///   - [ClockifyNotFoundException] if the workspace or user doesn't exist
+  ///   - [ClockifyNetworkException] if there's a network issue
+  ///   - [ClockifyException] for other API errors
+  ///
+  /// Example:
+  /// ```dart
+  /// final runningTimer = await VitClockify.timeEntries.getRunningTimer(
+  ///   workspaceId: 'workspace456',
+  ///   userId: 'user123',
+  /// );
+  ///
+  /// if (runningTimer != null) {
+  ///   print('Timer is running: ${runningTimer.description}');
+  /// }
+  /// ```
+  Future<TimeEntry?> getRunningTimer({
+    required String workspaceId,
+    required String userId,
+  }) async {
+    try {
+      final response = await ClockifyHttpClient.instance.get(
+        '/workspaces/$workspaceId/user/$userId/time-entries',
+        queryParameters: {'in-progress': true},
+      );
+      final List<dynamic> data = response.data;
+      if (data.isEmpty) return null;
+      return TimeEntry.fromJson(data.first as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioException(e);
+    }
+  }
 }
