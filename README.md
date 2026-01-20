@@ -35,6 +35,10 @@ Clockify is a simple time tracking tool. This SDK provides a convenient interfac
 
 - **Get time entries for user**: Retrieve time entries for a specific user with optional date filtering
 
+- **Get running timer**: Fetch the currently active timer for a user, if any
+
+- **Stop timer**: Stop a running timer by setting its end time
+
 ## Getting Started
 
 ### Prerequisites

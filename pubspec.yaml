@@ -1,7 +1,7 @@
 name: vit_clockify_sdk
 description: A Dart SDK for the Clockify API, providing a clean and type-safe interface for time tracking operations.
 version: 1.1.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/TimeLord2010/vit_clockify_sdk
 
 environment:
   sdk: ^3.10.7
