@@ -6,9 +6,9 @@ repository: https://github.com/TimeLord2010/vit_clockify_sdk
 environment:
   sdk: ^3.10.7
 
-# Add regular dependencies here.
 dependencies:
   dio: ^5.4.0
+  iso8601_duration: ^1.2.1
 
 dev_dependencies:
   lints: ^6.0.0
