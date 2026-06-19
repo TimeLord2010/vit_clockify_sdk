@@ -1,3 +1,9 @@
+## 1.2.0
+
+- Add `TaskModule` with `create`, `find`, and `delete` methods for managing project tasks.
+- Add `update` method to `TimeEntryModule` to update an existing time entry.
+- Add `delete` method to `TimeEntryModule` to delete a time entry.
+
 ## 1.1.0
 
 - Add `id` field to TimeEntry model.

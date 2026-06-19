@@ -29,6 +29,14 @@ Clockify is a simple time tracking tool. This SDK provides a convenient interfac
 
 - **List users in workspace**: Get all users in a specific workspace
 
+### Tasks
+
+- **Create task**: Create a new task within a project
+
+- **List tasks**: Retrieve tasks for a project with optional filtering by name and active status
+
+- **Delete task**: Remove a task from a project
+
 ### Time Entries
 
 - **Create time entry**: Create a new time entry in Clockify
@@ -38,6 +46,10 @@ Clockify is a simple time tracking tool. This SDK provides a convenient interfac
 - **Get running timer**: Fetch the currently active timer for a user, if any
 
 - **Stop timer**: Stop a running timer by setting its end time
+
+- **Update time entry**: Update an existing time entry's details (description, project, task, end time)
+
+- **Delete time entry**: Delete a time entry by ID
 
 ## Getting Started
 
