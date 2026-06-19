@@ -6,11 +6,31 @@ class Task {
   String name;
   String projectId;
   bool billable;
+
+  /// The task's logged duration.
+  ///
+  /// **Limitation:** derived from [durationIso] by mapping only hours, minutes,
+  /// seconds, and weeks. If the ISO value contains months
+  /// or years, those components are silently ignored and this value will be
+  /// inaccurate. Use [durationIso] directly when month/year precision matters.
   Duration duration;
+
+  /// The raw ISO 8601 duration returned by the Clockify API for logged time.
+  ISODuration durationIso;
+
+  /// The task's estimated duration.
+  ///
+  /// **Limitation:** derived from [estimateIso] by mapping only hours, minutes,
+  /// seconds, and weeks. If the ISO value contains months
+  /// or years, those components are silently ignored and this value will be
+  /// inaccurate. Use [estimateIso] directly when month/year precision matters.
   Duration estimate;
+
+  /// The raw ISO 8601 duration returned by the Clockify API for the estimate.
+  ISODuration estimateIso;
   TaskStatus status;
   List<String> assigneeIds;
-  final HourlyRate hourlyRate;
+  HourlyRate hourlyRate;
 
   Task({
     required this.id,
@@ -22,28 +42,36 @@ class Task {
     required this.status,
     required this.assigneeIds,
     required this.hourlyRate,
+    required this.durationIso,
+    required this.estimateIso,
   });
 
   factory Task.fromMap(Map<String, dynamic> map) {
     final converter = ISODurationConverter();
-    Duration convert(String value) {
+    (Duration, ISODuration) convert(String value) {
       final iso = converter.parseString(isoDurationString: value);
-      return Duration(
+      var dur = Duration(
         days: (iso.day?.toInt() ?? 0) + (iso.week?.toInt() ?? 0) * 7,
         hours: iso.hour?.toInt() ?? 0,
         minutes: iso.minute?.toInt() ?? 0,
         seconds: iso.seconds?.toInt() ?? 0,
       );
+      return (dur, iso);
     }
 
     List assigneeIds = map['assigneeIds'];
+
+    var durationValue = convert(map['duration']);
+    var estimateValue = convert(map['estimate']);
     return Task(
       id: map['id'],
       name: map['name'],
       projectId: map['projectId'],
       billable: map['billable'],
-      duration: convert(map['duration']),
-      estimate: convert(map['estimate']),
+      duration: durationValue.$1,
+      durationIso: durationValue.$2,
+      estimate: estimateValue.$1,
+      estimateIso: estimateValue.$2,
       status: TaskStatus.fromString(map['status']),
       assigneeIds: assigneeIds.map((x) => x as String).toList(),
       hourlyRate: HourlyRate.fromJson(map['hourlyRate']),

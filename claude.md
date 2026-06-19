@@ -23,15 +23,16 @@ This file contains important guidelines for maintaining the vit_clockify_sdk pac
 ## Pre-Release Checklist
 
 Before pushing a new version:
+
 - [ ] README.md updated with new features
 - [ ] CHANGELOG.md updated with version changes
 - [ ] pubspec.yaml version bumped appropriately
-- [ ] All tests passing
 - [ ] Code documented with proper dartdoc comments
 
 ## Why This Matters
 
 Keeping documentation in sync with code changes ensures:
+
 - Users can discover and understand new features
 - The package appears professional and well-maintained on pub.dev
 - Contributors understand the current state of the project

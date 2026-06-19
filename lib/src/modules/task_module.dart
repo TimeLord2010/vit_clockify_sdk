@@ -3,6 +3,32 @@ import 'package:vit_clockify_sdk/src/models/enums/sort_order.dart';
 import 'package:vit_clockify_sdk/src/models/task.dart';
 
 class TaskModule {
+  static Future<Task> create({
+    required String workspaceId,
+    required String projectId,
+    required String name,
+    String? id,
+    int? budgetEstimate,
+    TaskStatus? status,
+    String? estimate,
+    List<String>? assigneeIds,
+  }) async {
+    String url = '/workspaces/$workspaceId/projects/$projectId/tasks';
+    final response = await ClockifyHttpClient.instance.post(
+      url,
+      data: {
+        'name': name,
+        'id': ?id,
+        'budgetEstimate': ?budgetEstimate,
+        'status': ?status?.name.toUpperCase(),
+        'estimate': ?estimate,
+        'assigneeIds': ?assigneeIds,
+      },
+    );
+
+    return Task.fromMap(response.data);
+  }
+
   static Future<List<Task>> find({
     required String workspaceId,
     required String projectId,
@@ -29,6 +55,15 @@ class TaskModule {
     );
     List data = response.data;
     return [for (Map<String, dynamic> item in data) Task.fromMap(item)];
+  }
+
+  static Future<void> delete({
+    required String workspaceId,
+    required String projectId,
+    required String taskId,
+  }) async {
+    var url = '/workspaces/$workspaceId/projects/$projectId/tasks/$taskId';
+    await ClockifyHttpClient.instance.delete(url);
   }
 }
 
