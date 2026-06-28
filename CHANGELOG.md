@@ -1,3 +1,9 @@
+## 1.2.1
+
+- Fix: Corrected TimeEntryModule.update method syntax
+- Fix: TaskModule methods are now instance methods (following module pattern)
+- Fix: Task and SortOrder models are now properly exported
+
 ## 1.2.0
 
 - Add `TaskModule` with `create`, `find`, and `delete` methods for managing project tasks.

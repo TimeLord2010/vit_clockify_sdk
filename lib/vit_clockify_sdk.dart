@@ -40,6 +40,7 @@ export 'src/vit_clockify.dart';
 export 'src/models/hourly_rate.dart';
 export 'src/models/membership.dart';
 export 'src/models/project.dart';
+export 'src/models/task.dart';
 export 'src/models/time_entry.dart';
 export 'src/models/time_entry_request.dart';
 export 'src/models/time_interval.dart';
@@ -48,3 +49,6 @@ export 'src/models/workspace.dart';
 
 // Exceptions
 export 'src/core/api_exception.dart';
+
+// Enums
+export 'src/models/enums/sort_order.dart';

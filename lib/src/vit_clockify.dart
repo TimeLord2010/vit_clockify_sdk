@@ -1,5 +1,6 @@
 import 'core/http_client.dart';
 import 'modules/project_module.dart';
+import 'modules/task_module.dart';
 import 'modules/time_entry_module.dart';
 import 'modules/user_module.dart';
 import 'modules/workspace_module.dart';
@@ -60,6 +61,7 @@ class VitClockify {
   // Module instances (lazy-initialized singletons)
   static WorkspaceModule? _workspaceModule;
   static ProjectModule? _projectModule;
+  static TaskModule? _taskModule;
   static UserModule? _userModule;
   static TimeEntryModule? _timeEntryModule;
 
@@ -81,6 +83,17 @@ class VitClockify {
   /// );
   /// ```
   static ProjectModule get projects => _projectModule ??= ProjectModule();
+
+  /// Module for task operations.
+  ///
+  /// Use this to fetch and manage tasks within a project:
+  /// ```dart
+  /// final tasks = await VitClockify.tasks.find(
+  ///   workspaceId: 'workspace-id',
+  ///   projectId: 'project-id',
+  /// );
+  /// ```
+  static TaskModule get tasks => _taskModule ??= TaskModule();
 
   /// Module for user operations.
   ///

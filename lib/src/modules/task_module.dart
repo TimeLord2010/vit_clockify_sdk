@@ -3,7 +3,7 @@ import 'package:vit_clockify_sdk/src/models/enums/sort_order.dart';
 import 'package:vit_clockify_sdk/src/models/task.dart';
 
 class TaskModule {
-  static Future<Task> create({
+  Future<Task> create({
     required String workspaceId,
     required String projectId,
     required String name,
@@ -29,7 +29,7 @@ class TaskModule {
     return Task.fromMap(response.data);
   }
 
-  static Future<List<Task>> find({
+  Future<List<Task>> find({
     required String workspaceId,
     required String projectId,
     String? name,
@@ -38,7 +38,7 @@ class TaskModule {
     int page = 1,
     int pageSize = 50,
     TaskSortColomn sortColumn = .name,
-    SortOrder sortOrder = .asc,
+    SortOrder sortOrder = .ascending,
   }) async {
     var url = '/workspaces/$workspaceId/projects/$projectId/tasks';
     final response = await ClockifyHttpClient.instance.get(
@@ -47,8 +47,8 @@ class TaskModule {
         'name': ?name,
         'stric-name-search': stricNameSearch,
         'is-active': isActive,
-        'sort-column': sortColumn.name,
-        'sort-order': sortOrder.name,
+        'sort-column': sortColumn.name.toUpperCase(),
+        'sort-order': sortOrder.name.toUpperCase(),
         'page': page,
         'page-size': pageSize,
       },
@@ -57,7 +57,7 @@ class TaskModule {
     return [for (Map<String, dynamic> item in data) Task.fromMap(item)];
   }
 
-  static Future<void> delete({
+  Future<void> delete({
     required String workspaceId,
     required String projectId,
     required String taskId,
