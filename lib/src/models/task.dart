@@ -30,7 +30,7 @@ class Task {
   ISODuration estimateIso;
   TaskStatus status;
   List<String> assigneeIds;
-  HourlyRate hourlyRate;
+  HourlyRate? hourlyRate;
 
   Task({
     required this.id,
@@ -63,6 +63,7 @@ class Task {
 
     var durationValue = convert(map['duration']);
     var estimateValue = convert(map['estimate']);
+    var hourlyRate = map['hourlyRate'];
     return Task(
       id: map['id'],
       name: map['name'],
@@ -74,7 +75,7 @@ class Task {
       estimateIso: estimateValue.$2,
       status: TaskStatus.fromString(map['status']),
       assigneeIds: assigneeIds.map((x) => x as String).toList(),
-      hourlyRate: HourlyRate.fromJson(map['hourlyRate']),
+      hourlyRate: hourlyRate != null ? HourlyRate.fromJson(hourlyRate) : null,
     );
   }
 }
