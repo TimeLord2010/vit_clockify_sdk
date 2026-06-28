@@ -34,7 +34,7 @@ class TaskModule {
     required String projectId,
     String? name,
     bool stricNameSearch = false,
-    bool isActive = false,
+    bool isActive = true,
     int page = 1,
     int pageSize = 50,
     TaskSortColomn sortColumn = .name,

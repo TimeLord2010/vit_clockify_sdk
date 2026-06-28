@@ -13,10 +13,10 @@ class Task {
   /// seconds, and weeks. If the ISO value contains months
   /// or years, those components are silently ignored and this value will be
   /// inaccurate. Use [durationIso] directly when month/year precision matters.
-  Duration duration;
+  Duration? duration;
 
   /// The raw ISO 8601 duration returned by the Clockify API for logged time.
-  ISODuration durationIso;
+  ISODuration? durationIso;
 
   /// The task's estimated duration.
   ///
@@ -24,10 +24,10 @@ class Task {
   /// seconds, and weeks. If the ISO value contains months
   /// or years, those components are silently ignored and this value will be
   /// inaccurate. Use [estimateIso] directly when month/year precision matters.
-  Duration estimate;
+  Duration? estimate;
 
   /// The raw ISO 8601 duration returned by the Clockify API for the estimate.
-  ISODuration estimateIso;
+  ISODuration? estimateIso;
   TaskStatus status;
   List<String> assigneeIds;
   HourlyRate? hourlyRate;
@@ -48,7 +48,10 @@ class Task {
 
   factory Task.fromMap(Map<String, dynamic> map) {
     final converter = ISODurationConverter();
-    (Duration, ISODuration) convert(String value) {
+    (Duration, ISODuration)? convert(String? value) {
+      if (value == null) {
+        return null;
+      }
       final iso = converter.parseString(isoDurationString: value);
       var dur = Duration(
         days: (iso.day?.toInt() ?? 0) + (iso.week?.toInt() ?? 0) * 7,
@@ -69,10 +72,10 @@ class Task {
       name: map['name'],
       projectId: map['projectId'],
       billable: map['billable'],
-      duration: durationValue.$1,
-      durationIso: durationValue.$2,
-      estimate: estimateValue.$1,
-      estimateIso: estimateValue.$2,
+      duration: durationValue?.$1,
+      durationIso: durationValue?.$2,
+      estimate: estimateValue?.$1,
+      estimateIso: estimateValue?.$2,
       status: TaskStatus.fromString(map['status']),
       assigneeIds: assigneeIds.map((x) => x as String).toList(),
       hourlyRate: hourlyRate != null ? HourlyRate.fromJson(hourlyRate) : null,
