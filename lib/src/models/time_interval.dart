@@ -4,12 +4,12 @@
 /// They can be converted to/from ISO 8601 date-time strings.
 class TimeInterval {
   /// The start time of the interval (in local time).
-  final DateTime start;
+  DateTime start;
 
   /// The end time of the interval (in local time).
   ///
   /// For ongoing entries, this may be set to the current time.
-  final DateTime? end;
+  DateTime? end;
 
   /// Creates a new [TimeInterval] instance.
   TimeInterval({required this.start, required this.end});

@@ -211,6 +211,7 @@ class TimeEntryModule {
     await ClockifyHttpClient.instance.put(
       url,
       data: {
+        'start': start.toUtc().toIso8601String(),
         'end': ?end?.toUtc().toIso8601String(),
         'description': ?description,
         'taskId': ?taskId,

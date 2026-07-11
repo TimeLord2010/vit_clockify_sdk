@@ -1,3 +1,8 @@
+## 1.2.2
+
+- Fix: Made `TimeInterval.start` and `end` fields mutable to allow updating time entries
+- Fix: Added `start` field to `TimeEntryModule.update` request payload
+
 ## 1.2.1
 
 - Fix: Corrected TimeEntryModule.update method syntax
