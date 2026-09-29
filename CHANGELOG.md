@@ -1,3 +1,11 @@
+## 1.3.0
+
+- feat: Add `updateDescription` method to `TimeEntryModule` to rename (change the description of) a time entry while keeping all its other fields.
+- feat: Add `taskId`, `billable` and `tagIds` fields to the `TimeEntry` model.
+- feat: `TimeEntryModule.update` now accepts `billable` and `tagIds`.
+- fix: `TimeEntryModule.update` now throws `ClockifyException` subtypes instead of raw `DioException`.
+- fix: Made `TimeEntry.description` mutable to allow updating time entries in place.
+
 ## 1.2.2
 
 - Fix: Made `TimeInterval.start` and `end` fields mutable to allow updating time entries

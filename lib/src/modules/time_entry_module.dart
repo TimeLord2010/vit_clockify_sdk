@@ -198,6 +198,26 @@ class TimeEntryModule {
     }
   }
 
+  /// Updates an existing time entry.
+  ///
+  /// Uses `PUT /workspaces/{workspaceId}/time-entries/{id}`, which does not
+  /// require admin permissions when the entry belongs to the API key owner.
+  ///
+  /// This is a full replacement: optional fields that are omitted may be
+  /// reset by Clockify (e.g. description, task, tags, billable). Pass every
+  /// value that must be kept, or use [updateDescription] to change only the
+  /// description of a [TimeEntry] you already have.
+  ///
+  /// Example:
+  /// ```dart
+  /// await VitClockify.timeEntries.update(
+  ///   workspaceId: 'workspace456',
+  ///   entryId: 'entry123',
+  ///   start: DateTime(2026, 1, 1, 9),
+  ///   end: DateTime(2026, 1, 1, 10),
+  ///   description: 'Code review',
+  /// );
+  /// ```
   Future<void> update({
     required String workspaceId,
     required String entryId,
@@ -206,17 +226,57 @@ class TimeEntryModule {
     String? description,
     String? taskId,
     String? projectId,
+    bool? billable,
+    List<String>? tagIds,
   }) async {
     String url = '/workspaces/$workspaceId/time-entries/$entryId';
-    await ClockifyHttpClient.instance.put(
-      url,
-      data: {
-        'start': start.toUtc().toIso8601String(),
-        'end': ?end?.toUtc().toIso8601String(),
-        'description': ?description,
-        'taskId': ?taskId,
-        'projectId': ?projectId,
-      },
+    try {
+      await ClockifyHttpClient.instance.put(
+        url,
+        data: {
+          'start': start.toUtc().toIso8601String(),
+          'end': ?end?.toUtc().toIso8601String(),
+          'description': ?description,
+          'taskId': ?taskId,
+          'projectId': ?projectId,
+          'billable': ?billable,
+          'tagIds': ?tagIds,
+        },
+      );
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioException(e);
+    }
+  }
+
+  /// Changes the description (title) of an existing time entry.
+  ///
+  /// Every other field of [entry] (start, end, project, task, billable and
+  /// tags) is sent unchanged, so only the description is modified. Does not
+  /// require admin permissions when the entry belongs to the API key owner.
+  ///
+  /// Example:
+  /// ```dart
+  /// await VitClockify.timeEntries.updateDescription(
+  ///   workspaceId: 'workspace456',
+  ///   entry: entry,
+  ///   description: 'New title',
+  /// );
+  /// ```
+  Future<void> updateDescription({
+    required String workspaceId,
+    required TimeEntry entry,
+    required String description,
+  }) {
+    return update(
+      workspaceId: workspaceId,
+      entryId: entry.id,
+      start: entry.timeInterval.start,
+      end: entry.timeInterval.end,
+      description: description,
+      taskId: entry.taskId,
+      projectId: entry.projectId,
+      billable: entry.billable,
+      tagIds: entry.tagIds,
     );
   }
 

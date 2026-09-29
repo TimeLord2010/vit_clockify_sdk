@@ -47,7 +47,9 @@ Clockify is a simple time tracking tool. This SDK provides a convenient interfac
 
 - **Stop timer**: Stop a running timer by setting its end time
 
-- **Update time entry**: Update an existing time entry's details (description, project, task, end time)
+- **Update time entry**: Update an existing time entry's details (description, project, task, start/end time, billable, tags)
+
+- **Rename time entry**: Change only the description (title) of a time entry, keeping all its other fields
 
 - **Delete time entry**: Delete a time entry by ID
 

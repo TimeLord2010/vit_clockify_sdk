@@ -73,6 +73,39 @@ void main() {
       final interval = TimeInterval(start: start, end: end);
       expect(interval.duration, equals(Duration(hours: 1, minutes: 30)));
     });
+
+    test('TimeEntry parses task, billable and tags from JSON', () {
+      final json = {
+        'id': 'te-123',
+        'description': 'Code review',
+        'projectId': 'proj-123',
+        'taskId': 'task-123',
+        'billable': true,
+        'tagIds': ['tag-1', 'tag-2'],
+        'userId': 'user-123',
+        'timeInterval': {
+          'start': '2026-01-15T09:00:00Z',
+          'end': '2026-01-15T10:00:00Z',
+        },
+      };
+      final entry = TimeEntry.fromJson(json);
+      expect(entry.taskId, equals('task-123'));
+      expect(entry.billable, isTrue);
+      expect(entry.tagIds, equals(['tag-1', 'tag-2']));
+    });
+
+    test('TimeEntry defaults task, billable and tags when absent', () {
+      final json = {
+        'id': 'te-123',
+        'projectId': 'proj-123',
+        'userId': 'user-123',
+        'timeInterval': {'start': '2026-01-15T09:00:00Z', 'end': null},
+      };
+      final entry = TimeEntry.fromJson(json);
+      expect(entry.taskId, isNull);
+      expect(entry.billable, isFalse);
+      expect(entry.tagIds, isEmpty);
+    });
   });
 
   group('Exception Types', () {
